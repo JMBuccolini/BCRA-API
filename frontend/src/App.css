@@ -139,6 +139,15 @@
   color: var(--text-muted);
 }
 
+.location-input {
+  flex: 0.6;
+  min-width: 180px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%239ca3af' viewBox='0 0 16 16'%3E%3Cpath d='M8 0a5 5 0 0 0-5 5c0 4.5 5 11 5 11s5-6.5 5-11a5 5 0 0 0-5-5zm0 7.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 0.75rem center;
+  padding-left: 2.25rem;
+}
+
 /* Sort bar */
 .sort-bar {
   display: flex;
@@ -343,6 +352,34 @@
 .tag.orange {
   background: #fffaf0;
   color: #c05621;
+}
+
+/* Branch button */
+.branch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  background: #ebf5ff;
+  color: var(--primary);
+  border: 1.5px solid var(--primary);
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: fit-content;
+  margin-top: auto;
+}
+
+.branch-btn::before {
+  content: '\1F4CD';
+  font-size: 0.85rem;
+}
+
+.branch-btn:hover {
+  background: var(--primary);
+  color: white;
 }
 
 /* Loading */

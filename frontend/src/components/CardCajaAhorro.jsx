@@ -1,4 +1,6 @@
-export function CardCajaAhorro({ data }) {
+import { BranchButton } from './BranchButton'
+
+export function CardCajaAhorro({ data, userLocation }) {
   return (
     <div className="card">
       <div className="card-header">
@@ -19,6 +21,7 @@ export function CardCajaAhorro({ data }) {
           <span className="field-value">{data.codigoEntidad}</span>
         </div>
       </div>
+      <BranchButton entidad={data.entidad} userLocation={userLocation} />
     </div>
   )
 }

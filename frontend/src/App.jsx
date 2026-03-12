@@ -120,6 +120,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('')
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
   const [activeSort, setActiveSort] = useState(null)
+  const [userLocation, setUserLocation] = useState('')
 
   const loadData = useCallback(async (category) => {
     setLoading(true)
@@ -213,6 +214,13 @@ function App() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+          <input
+            type="text"
+            className="filter-input location-input"
+            placeholder="Tu ubicación (ej: Av. Corrientes 1234, CABA)"
+            value={userLocation}
+            onChange={(e) => setUserLocation(e.target.value)}
+          />
         </div>
 
         {sortOptions.length > 0 && (
@@ -269,6 +277,7 @@ function App() {
                       data={item}
                       isBest={item === bestItem}
                       bestLabel={bestLabel}
+                      userLocation={userLocation}
                     />
                   ))}
                 </div>

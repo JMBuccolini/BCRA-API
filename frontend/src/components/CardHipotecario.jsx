@@ -1,4 +1,6 @@
-export function CardHipotecario({ data, isBest, bestLabel }) {
+import { BranchButton } from './BranchButton'
+
+export function CardHipotecario({ data, isBest, bestLabel, userLocation }) {
   const formatMoney = (val) => {
     if (!val) return '-'
     const num = parseFloat(val.replace(',', '.'))
@@ -57,6 +59,7 @@ export function CardHipotecario({ data, isBest, bestLabel }) {
           <span className="field-value">{formatMoney(data.cuotaInicial)}</span>
         </div>
       </div>
+      <BranchButton entidad={data.entidad} userLocation={userLocation} />
     </div>
   )
 }

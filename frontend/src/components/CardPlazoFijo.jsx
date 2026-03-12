@@ -1,4 +1,6 @@
-export function CardPlazoFijo({ data, isBest, bestLabel }) {
+import { BranchButton } from './BranchButton'
+
+export function CardPlazoFijo({ data, isBest, bestLabel, userLocation }) {
   return (
     <div className={`card${isBest ? ' card-best' : ''}`}>
       {isBest && <div className="best-badge">{bestLabel}</div>}
@@ -33,6 +35,7 @@ export function CardPlazoFijo({ data, isBest, bestLabel }) {
           <span className="field-value small">{data.territorio || '-'}</span>
         </div>
       </div>
+      <BranchButton entidad={data.entidad} userLocation={userLocation} />
     </div>
   )
 }

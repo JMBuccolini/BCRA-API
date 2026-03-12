@@ -1,4 +1,6 @@
-export function CardPrestamo({ data, isBest, bestLabel }) {
+import { BranchButton } from './BranchButton'
+
+export function CardPrestamo({ data, isBest, bestLabel, userLocation }) {
   const formatMoney = (val) => {
     if (!val) return '-'
     const num = parseFloat(val.replace(',', '.'))
@@ -57,6 +59,7 @@ export function CardPrestamo({ data, isBest, bestLabel }) {
           </div>
         )}
       </div>
+      <BranchButton entidad={data.entidad} userLocation={userLocation} />
     </div>
   )
 }
