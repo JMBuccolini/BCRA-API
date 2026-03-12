@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.bcra.gob.ar)",
+      "WebSearch",
+      "Bash(cd \"C:/Users/Usuario/Desktop/APIBCRA\" && npx @nestjs/cli@latest new backend --package-manager npm --skip-git --skip-install -l JS 2>&1 | tail -20)",
+      "Bash(cd \"C:/Users/Usuario/Desktop/APIBCRA\" && npm create vite@latest frontend -- --template react 2>&1 | tail -10)",
+      "Bash(cd \"C:/Users/Usuario/Desktop/APIBCRA/backend\" && npm install 2>&1 | tail -5)",
+      "Bash(cd \"C:/Users/Usuario/Desktop/APIBCRA/frontend\" && npm install 2>&1 | tail -5)",
+      "Bash(cd \"C:/Users/Usuario/Desktop/APIBCRA/backend\" && npx nest build 2>&1)",
+      "Bash(cd \"C:/Users/Usuario/Desktop/APIBCRA/backend\" && node index.js 2>&1)",
+      "Bash(sleep 5 && curl -s http://localhost:3001/api/transparencia/categorias 2>&1)",
+      "Bash(curl -s http://localhost:3001/api/transparencia/plazosFijos?entidad=galicia 2>&1 | head -c 500)",
+      "Bash(curl -s \"http://localhost:3001/api/transparencia/cajasDeAhorro\" 2>&1 | head -100)",
+      "Bash(curl -s \"http://localhost:3001/api/transparencia/plazosFijos\" 2>&1 | python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(f'Total: {d[\\\\\"total\\\\\"]}'\\); print\\(json.dumps\\(d['data'][0], indent=2, ensure_ascii=False\\)\\)\" 2>&1)",
+      "Bash(curl -s \"http://localhost:3001/api/transparencia/plazosFijos\" 2>&1 | node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('Total:',j.total\\);console.log\\(JSON.stringify\\(j.data[0],null,2\\)\\)}\\)\")",
+      "Bash(curl -s \"http://localhost:3001/api/transparencia/tarjetas\" 2>&1 | node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('Total:',j.total\\);console.log\\(JSON.stringify\\(j.data[0],null,2\\)\\)}\\)\")",
+      "Bash(curl -s \"http://localhost:3001/api/transparencia/personales\" 2>&1 | node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('Total:',j.total\\);console.log\\(JSON.stringify\\(j.data[0],null,2\\)\\)}\\)\")",
+      "Bash(curl -s \"http://localhost:3001/api/transparencia/hipotecarios\" | node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('Hipotecarios Total:',j.total\\)}\\)\")",
+      "Bash(curl -s \"http://localhost:3001/api/transparencia/prendarios\" | node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('Prendarios Total:',j.total\\)}\\)\")",
+      "Bash(curl -s \"http://localhost:3001/api/transparencia/paquetes\" | node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('Paquetes Total:',j.total\\)}\\)\")",
+      "Bash(curl -s \"http://localhost:3001/api/transparencia/personales?entidad=BANCO%20NACION\" | node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('Filtro entidad BANCO NACION:',j.total,'resultados'\\)}\\)\")",
+      "Bash(curl -s \"http://localhost:3001/api/transparencia/personales/entidades\" | node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('Total entidades:',j.length\\);const nacion=j.filter\\(e=>e.toLowerCase\\(\\).includes\\('nacion'\\)\\);console.log\\('Nacion:',nacion\\)}\\)\")",
+      "Bash(curl -s \"http://localhost:3001/api/transparencia/personales?entidad=BANCO%20DE%20LA%20NACION%20ARGENTINA\" | node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('Banco Nación préstamos personales:',j.total,'resultados'\\)}\\)\")",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}
