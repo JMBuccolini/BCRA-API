@@ -46,6 +46,56 @@ const BEST_CRITERIA = {
   paquetes: { field: 'comisionMantenimiento', mode: 'min', label: 'Más económico' },
 }
 
+const SORT_OPTIONS = {
+  plazosFijos: [
+    { field: 'tasaEfectivaAnual', dir: 'desc', label: 'Mayor tasa' },
+    { field: 'tasaEfectivaAnual', dir: 'asc', label: 'Menor tasa' },
+    { field: 'montoMinimo', dir: 'asc', label: 'Menor monto mínimo' },
+    { field: 'montoMinimo', dir: 'desc', label: 'Mayor monto mínimo' },
+  ],
+  tarjetas: [
+    { field: 'teaCompensatorio', dir: 'asc', label: 'Menor TEA' },
+    { field: 'teaCompensatorio', dir: 'desc', label: 'Mayor TEA' },
+    { field: 'comisionAdministracion', dir: 'asc', label: 'Menor comisión' },
+    { field: 'ingresoMinimo', dir: 'asc', label: 'Menor ingreso requerido' },
+  ],
+  personales: [
+    { field: 'cfteaMaximo', dir: 'asc', label: 'Menor CFTEA' },
+    { field: 'teaMaxima', dir: 'asc', label: 'Menor TEA' },
+    { field: 'montoMaximo', dir: 'desc', label: 'Mayor monto' },
+    { field: 'plazoMaximo', dir: 'desc', label: 'Mayor plazo' },
+  ],
+  hipotecarios: [
+    { field: 'cfteaMaximo', dir: 'asc', label: 'Menor CFTEA' },
+    { field: 'teaMaxima', dir: 'asc', label: 'Menor TEA' },
+    { field: 'montoMaximo', dir: 'desc', label: 'Mayor monto' },
+    { field: 'plazoMaximo', dir: 'desc', label: 'Mayor plazo' },
+  ],
+  prendarios: [
+    { field: 'cfteaMaximo', dir: 'asc', label: 'Menor CFTEA' },
+    { field: 'teaMaxima', dir: 'asc', label: 'Menor TEA' },
+    { field: 'montoMaximo', dir: 'desc', label: 'Mayor monto' },
+    { field: 'plazoMaximo', dir: 'desc', label: 'Mayor plazo' },
+  ],
+  paquetes: [
+    { field: 'comisionMantenimiento', dir: 'asc', label: 'Menor comisión' },
+    { field: 'comisionMantenimiento', dir: 'desc', label: 'Mayor comisión' },
+    { field: 'ingresoMinimo', dir: 'asc', label: 'Menor ingreso requerido' },
+  ],
+}
+
+function sortData(items, sortOption) {
+  if (!sortOption) return items
+  return [...items].sort((a, b) => {
+    const valA = parseNum(a[sortOption.field])
+    const valB = parseNum(b[sortOption.field])
+    if (valA === null && valB === null) return 0
+    if (valA === null) return 1
+    if (valB === null) return -1
+    return sortOption.dir === 'asc' ? valA - valB : valB - valA
+  })
+}
+
 function findBestItem(items, category) {
   const criteria = BEST_CRITERIA[category]
   if (!criteria || items.length === 0) return null
@@ -69,6 +119,7 @@ function App() {
   const [error, setError] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
+  const [activeSort, setActiveSort] = useState(null)
 
   const loadData = useCallback(async (category) => {
     setLoading(true)
@@ -96,6 +147,7 @@ function App() {
   const handleCategoryChange = (catId) => {
     setActiveCategory(catId)
     setSearchTerm('')
+    setActiveSort(null)
   }
 
   const filteredData = data.filter((item) => {
@@ -107,13 +159,15 @@ function App() {
   })
 
   const bestItem = findBestItem(filteredData, activeCategory)
-  const sortedData = bestItem
-    ? [bestItem, ...filteredData.filter((item) => item !== bestItem)]
-    : filteredData
+  const sorted = activeSort ? sortData(filteredData, activeSort) : filteredData
+  const sortedData = !activeSort && bestItem
+    ? [bestItem, ...sorted.filter((item) => item !== bestItem)]
+    : sorted
   const visibleData = sortedData.slice(0, visibleCount)
   const hasMore = visibleCount < sortedData.length
   const CardComponent = CARD_COMPONENTS[activeCategory]
   const bestLabel = BEST_CRITERIA[activeCategory]?.label
+  const sortOptions = SORT_OPTIONS[activeCategory] || []
 
   return (
     <div className="app">
@@ -160,6 +214,21 @@ function App() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
+
+        {sortOptions.length > 0 && (
+          <div className="sort-bar">
+            <span className="sort-label">Ordenar por:</span>
+            {sortOptions.map((opt, idx) => (
+              <button
+                key={idx}
+                className={`sort-badge ${activeSort === opt ? 'active' : ''}`}
+                onClick={() => setActiveSort(activeSort === opt ? null : opt)}
+              >
+                {opt.dir === 'asc' ? '\u2191' : '\u2193'} {opt.label}
+              </button>
+            ))}
+          </div>
+        )}
 
         {loading && (
           <div className="loading">
