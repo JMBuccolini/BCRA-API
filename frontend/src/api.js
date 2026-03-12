@@ -1,4 +1,5 @@
-const API_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:3001') + '/api/transparencia';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const API_BASE = API_URL + '/api/transparencia';
 
 export async function fetchCategorias() {
   const res = await fetch(`${API_BASE}/categorias`);
@@ -21,5 +22,17 @@ export async function fetchCategory(category, filters = {}) {
 export async function fetchEntidades(category) {
   const res = await fetch(`${API_BASE}/${category}/entidades`);
   if (!res.ok) throw new Error('Error al obtener entidades');
+  return res.json();
+}
+
+export async function fetchUvaEvolucion(meses = 12) {
+  const res = await fetch(`${API_URL}/api/uva/evolucion?meses=${meses}`);
+  if (!res.ok) throw new Error('Error al obtener datos UVA');
+  return res.json();
+}
+
+export async function fetchNoticias() {
+  const res = await fetch(`${API_URL}/api/noticias`);
+  if (!res.ok) throw new Error('Error al obtener noticias');
   return res.json();
 }

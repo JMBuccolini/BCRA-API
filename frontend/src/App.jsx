@@ -8,6 +8,8 @@ import { CardPaquete } from './components/CardPaquete'
 import { CardCajaAhorro } from './components/CardCajaAhorro'
 import { CardHipotecario } from './components/CardHipotecario'
 import { CardPrendario } from './components/CardPrendario'
+import { UvaSection } from './components/UvaSection'
+import { NoticiasSection } from './components/NoticiasSection'
 
 const CATEGORIES = [
   { id: 'plazosFijos', nombre: 'Plazos Fijos', icon: '📊' },
@@ -17,6 +19,8 @@ const CATEGORIES = [
   { id: 'prendarios', nombre: 'Prendarios', icon: '🚗' },
   { id: 'paquetes', nombre: 'Paquetes', icon: '📦' },
   { id: 'cajasDeAhorro', nombre: 'Cajas de Ahorro', icon: '🏦' },
+  { id: 'uva', nombre: 'UVA', icon: '📈', special: true },
+  { id: 'noticias', nombre: 'Noticias', icon: '📰', special: true },
 ]
 
 const CARD_COMPONENTS = {
@@ -122,7 +126,10 @@ function App() {
   const [activeSort, setActiveSort] = useState(null)
   const [userLocation, setUserLocation] = useState('')
 
+  const isSpecial = CATEGORIES.find(c => c.id === activeCategory)?.special
+
   const loadData = useCallback(async (category) => {
+    if (CATEGORIES.find(c => c.id === category)?.special) return
     setLoading(true)
     setError(null)
     setVisibleCount(PAGE_SIZE)
@@ -206,90 +213,99 @@ function App() {
           ))}
         </nav>
 
-        <div className="filters">
-          <input
-            type="text"
-            className="filter-input"
-            placeholder="Buscar por entidad, producto, denominación..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <input
-            type="text"
-            className="filter-input location-input"
-            placeholder="Tu ubicación (ej: Av. Corrientes 1234, CABA)"
-            value={userLocation}
-            onChange={(e) => setUserLocation(e.target.value)}
-          />
-        </div>
-
-        {sortOptions.length > 0 && (
-          <div className="sort-bar">
-            <span className="sort-label">Ordenar por:</span>
-            {sortOptions.map((opt, idx) => (
-              <button
-                key={idx}
-                className={`sort-badge ${activeSort === opt ? 'active' : ''}`}
-                onClick={() => setActiveSort(activeSort === opt ? null : opt)}
-              >
-                {opt.dir === 'asc' ? '\u2191' : '\u2193'} {opt.label}
-              </button>
-            ))}
-          </div>
-        )}
-
-        {loading && (
-          <div className="loading">
-            <div className="spinner" />
-            <p className="loading-text">Cargando datos del BCRA...</p>
-          </div>
-        )}
-
-        {error && (
-          <div className="error-container">
-            <h3>Error al cargar datos</h3>
-            <p>{error}</p>
-            <button className="retry-btn" onClick={() => loadData(activeCategory)}>
-              Reintentar
-            </button>
-          </div>
-        )}
-
-        {!loading && !error && (
+        {isSpecial ? (
           <>
-            <div className="results-info">
-              <span className="results-count">
-                Mostrando <strong>{visibleData.length}</strong> de <strong>{filteredData.length}</strong> resultados
-              </span>
+            {activeCategory === 'uva' && <UvaSection />}
+            {activeCategory === 'noticias' && <NoticiasSection />}
+          </>
+        ) : (
+          <>
+            <div className="filters">
+              <input
+                type="text"
+                className="filter-input"
+                placeholder="Buscar por entidad, producto, denominación..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <input
+                type="text"
+                className="filter-input location-input"
+                placeholder="Tu ubicación (ej: Av. Corrientes 1234, CABA)"
+                value={userLocation}
+                onChange={(e) => setUserLocation(e.target.value)}
+              />
             </div>
 
-            {filteredData.length === 0 ? (
-              <div className="empty-state">
-                <div className="empty-state-icon">🔍</div>
-                <p>No se encontraron resultados para tu búsqueda.</p>
+            {sortOptions.length > 0 && (
+              <div className="sort-bar">
+                <span className="sort-label">Ordenar por:</span>
+                {sortOptions.map((opt, idx) => (
+                  <button
+                    key={idx}
+                    className={`sort-badge ${activeSort === opt ? 'active' : ''}`}
+                    onClick={() => setActiveSort(activeSort === opt ? null : opt)}
+                  >
+                    {opt.dir === 'asc' ? '\u2191' : '\u2193'} {opt.label}
+                  </button>
+                ))}
               </div>
-            ) : (
+            )}
+
+            {loading && (
+              <div className="loading">
+                <div className="spinner" />
+                <p className="loading-text">Cargando datos del BCRA...</p>
+              </div>
+            )}
+
+            {error && (
+              <div className="error-container">
+                <h3>Error al cargar datos</h3>
+                <p>{error}</p>
+                <button className="retry-btn" onClick={() => loadData(activeCategory)}>
+                  Reintentar
+                </button>
+              </div>
+            )}
+
+            {!loading && !error && (
               <>
-                <div className="data-grid">
-                  {visibleData.map((item, idx) => (
-                    <CardComponent
-                      key={idx}
-                      data={item}
-                      isBest={item === bestItem}
-                      bestLabel={bestLabel}
-                      userLocation={userLocation}
-                    />
-                  ))}
+                <div className="results-info">
+                  <span className="results-count">
+                    Mostrando <strong>{visibleData.length}</strong> de <strong>{filteredData.length}</strong> resultados
+                  </span>
                 </div>
-                {hasMore && (
-                  <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
-                    <button
-                      className="retry-btn"
-                      onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-                    >
-                      Cargar más resultados ({filteredData.length - visibleCount} restantes)
-                    </button>
+
+                {filteredData.length === 0 ? (
+                  <div className="empty-state">
+                    <div className="empty-state-icon">🔍</div>
+                    <p>No se encontraron resultados para tu búsqueda.</p>
                   </div>
+                ) : (
+                  <>
+                    <div className="data-grid">
+                      {visibleData.map((item, idx) => (
+                        <CardComponent
+                          key={idx}
+                          data={item}
+                          isBest={item === bestItem}
+                          bestLabel={bestLabel}
+                          userLocation={userLocation}
+                        />
+                      ))}
+                    </div>
+                    {hasMore && (
+                      <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
+                        <button
+                          className="retry-btn"
+                          onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
+                        >
+                          Cargar más resultados ({filteredData.length - visibleCount} restantes)
+                        </button>
+                      </div>
+                    )}
+                  </>
                 )}
               </>
             )}
