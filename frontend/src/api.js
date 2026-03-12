@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:3001/api/transparencia';
+const API_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:3001') + '/api/transparencia';
 
 export async function fetchCategorias() {
   const res = await fetch(`${API_BASE}/categorias`);
