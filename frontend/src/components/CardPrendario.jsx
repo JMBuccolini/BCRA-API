@@ -1,10 +1,17 @@
 import { BranchButton } from './BranchButton'
 
-export function CardPrendario({ data, isBest, bestLabel, userLocation }) {
+export function CardPrendario({ data, isBest, bestLabel, userLocation, valorUva }) {
   const formatMoney = (val) => {
     if (!val) return '-'
     const num = parseFloat(val.replace(',', '.'))
     return isNaN(num) ? val : `$${num.toLocaleString('es-AR')}`
+  }
+
+  const montoEnUva = () => {
+    if (!valorUva || !data.montoMaximo) return null
+    const monto = parseFloat(data.montoMaximo.replace(',', '.'))
+    if (isNaN(monto)) return null
+    return Math.round(monto / valorUva).toLocaleString('es-AR')
   }
 
   return (
@@ -27,6 +34,7 @@ export function CardPrendario({ data, isBest, bestLabel, userLocation }) {
         <div className="card-field">
           <span className="field-label">Monto máximo</span>
           <span className="field-value">{formatMoney(data.montoMaximo)}</span>
+          {montoEnUva() && <span className="field-uva">{montoEnUva()} UVAs</span>}
         </div>
         <div className="card-field">
           <span className="field-label">Plazo máximo</span>

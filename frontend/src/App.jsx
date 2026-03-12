@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import './App.css'
-import { fetchCategory } from './api'
+import { fetchCategory, fetchUvaEvolucion } from './api'
 import { CardPlazoFijo } from './components/CardPlazoFijo'
 import { CardTarjeta } from './components/CardTarjeta'
 import { CardPrestamo } from './components/CardPrestamo'
@@ -125,8 +125,13 @@ function App() {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
   const [activeSort, setActiveSort] = useState(null)
   const [userLocation, setUserLocation] = useState('')
+  const [valorUva, setValorUva] = useState(null)
 
   const isSpecial = CATEGORIES.find(c => c.id === activeCategory)?.special
+
+  useEffect(() => {
+    fetchUvaEvolucion(1).then((res) => setValorUva(res.valorActual)).catch(() => {})
+  }, [])
 
   const loadData = useCallback(async (category) => {
     if (CATEGORIES.find(c => c.id === category)?.special) return
@@ -292,6 +297,7 @@ function App() {
                           isBest={item === bestItem}
                           bestLabel={bestLabel}
                           userLocation={userLocation}
+                          valorUva={valorUva}
                         />
                       ))}
                     </div>
