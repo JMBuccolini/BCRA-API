@@ -15,9 +15,6 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@nestjs/common": "^11.0.1",
-    "@nestjs/core": "^11.0.1",
-    "@nestjs/platform-express": "^11.0.1",
     "@babel/core": "7.28.4",
     "@babel/node": "7.28.0",
     "@babel/plugin-proposal-decorators": "7.28.0",
@@ -25,7 +22,11 @@
     "@babel/preset-env": "7.28.3",
     "@babel/register": "7.28.3",
     "@babel/runtime": "7.28.4",
+    "@nestjs/common": "^11.0.1",
+    "@nestjs/core": "^11.0.1",
+    "@nestjs/platform-express": "^11.0.1",
     "reflect-metadata": "^0.2.0",
+    "rss-parser": "^3.13.0",
     "rxjs": "^7.2.0"
   },
   "devDependencies": {
