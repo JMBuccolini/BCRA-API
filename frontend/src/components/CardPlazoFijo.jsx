@@ -1,6 +1,7 @@
-export function CardPlazoFijo({ data }) {
+export function CardPlazoFijo({ data, isBest, bestLabel }) {
   return (
-    <div className="card">
+    <div className={`card${isBest ? ' card-best' : ''}`}>
+      {isBest && <div className="best-badge">{bestLabel}</div>}
       <div className="card-header">
         <span className="card-entity">{data.entidad}</span>
         <span className="card-date">{data.fechaInformacion}</span>

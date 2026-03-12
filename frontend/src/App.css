@@ -183,6 +183,32 @@
   transform: translateY(-1px);
 }
 
+/* Best option card */
+.card-best {
+  border: 2px solid var(--success);
+  background: linear-gradient(135deg, #f0fff4 0%, var(--bg-card) 100%);
+  position: relative;
+  grid-column: 1 / -1;
+}
+
+.best-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--success);
+  color: white;
+  padding: 0.3rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  width: fit-content;
+}
+
+.best-badge::before {
+  content: '\2605';
+}
+
 .card-header {
   display: flex;
   justify-content: space-between;

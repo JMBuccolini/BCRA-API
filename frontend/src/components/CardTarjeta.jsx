@@ -1,4 +1,4 @@
-export function CardTarjeta({ data }) {
+export function CardTarjeta({ data, isBest, bestLabel }) {
   const formatMoney = (val) => {
     if (!val) return '-'
     const num = parseFloat(val.replace(',', '.'))
@@ -6,7 +6,8 @@ export function CardTarjeta({ data }) {
   }
 
   return (
-    <div className="card">
+    <div className={`card${isBest ? ' card-best' : ''}`}>
+      {isBest && <div className="best-badge">{bestLabel}</div>}
       <div className="card-header">
         <span className="card-entity">{data.entidad}</span>
         <span className="card-date">{data.fechaInformacion}</span>

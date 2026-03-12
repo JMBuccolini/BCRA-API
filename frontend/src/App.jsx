@@ -31,6 +31,37 @@ const CARD_COMPONENTS = {
 
 const PAGE_SIZE = 50
 
+const parseNum = (val) => {
+  if (!val) return null
+  const num = parseFloat(String(val).replace(',', '.'))
+  return isNaN(num) ? null : num
+}
+
+const BEST_CRITERIA = {
+  plazosFijos: { field: 'tasaEfectivaAnual', mode: 'max', label: 'Mejor tasa' },
+  tarjetas: { field: 'teaCompensatorio', mode: 'min', label: 'Más económica' },
+  personales: { field: 'cfteaMaximo', mode: 'min', label: 'Más económico' },
+  hipotecarios: { field: 'cfteaMaximo', mode: 'min', label: 'Más económico' },
+  prendarios: { field: 'cfteaMaximo', mode: 'min', label: 'Más económico' },
+  paquetes: { field: 'comisionMantenimiento', mode: 'min', label: 'Más económico' },
+}
+
+function findBestItem(items, category) {
+  const criteria = BEST_CRITERIA[category]
+  if (!criteria || items.length === 0) return null
+  let best = null
+  let bestVal = null
+  for (const item of items) {
+    const val = parseNum(item[criteria.field])
+    if (val === null || val === 0) continue
+    if (bestVal === null || (criteria.mode === 'min' ? val < bestVal : val > bestVal)) {
+      bestVal = val
+      best = item
+    }
+  }
+  return best
+}
+
 function App() {
   const [activeCategory, setActiveCategory] = useState('plazosFijos')
   const [data, setData] = useState([])
@@ -75,9 +106,14 @@ function App() {
     )
   })
 
-  const visibleData = filteredData.slice(0, visibleCount)
-  const hasMore = visibleCount < filteredData.length
+  const bestItem = findBestItem(filteredData, activeCategory)
+  const sortedData = bestItem
+    ? [bestItem, ...filteredData.filter((item) => item !== bestItem)]
+    : filteredData
+  const visibleData = sortedData.slice(0, visibleCount)
+  const hasMore = visibleCount < sortedData.length
   const CardComponent = CARD_COMPONENTS[activeCategory]
+  const bestLabel = BEST_CRITERIA[activeCategory]?.label
 
   return (
     <div className="app">
@@ -159,7 +195,12 @@ function App() {
               <>
                 <div className="data-grid">
                   {visibleData.map((item, idx) => (
-                    <CardComponent key={idx} data={item} />
+                    <CardComponent
+                      key={idx}
+                      data={item}
+                      isBest={item === bestItem}
+                      bestLabel={bestLabel}
+                    />
                   ))}
                 </div>
                 {hasMore && (
