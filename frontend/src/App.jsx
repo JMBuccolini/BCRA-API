@@ -10,6 +10,7 @@ import { CardHipotecario } from './components/CardHipotecario'
 import { CardPrendario } from './components/CardPrendario'
 import { UvaSection } from './components/UvaSection'
 import { NoticiasSection } from './components/NoticiasSection'
+import { MetricsDashboard } from './components/MetricsDashboard'
 
 const CATEGORIES = [
   { id: 'plazosFijos', nombre: 'Plazos Fijos', icon: '📊' },
@@ -117,6 +118,9 @@ function findBestItem(items, category) {
 }
 
 function App() {
+  const [showMetrics, setShowMetrics] = useState(() => {
+    return window.location.search.includes('metrics') || window.location.hash === '#metrics'
+  })
   const [activeCategory, setActiveCategory] = useState('plazosFijos')
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(false)
@@ -181,6 +185,19 @@ function App() {
   const CardComponent = CARD_COMPONENTS[activeCategory]
   const bestLabel = BEST_CRITERIA[activeCategory]?.label
   const sortOptions = SORT_OPTIONS[activeCategory] || []
+
+  if (showMetrics) {
+    return (
+      <div className="app">
+        <main className="main">
+          <MetricsDashboard onBack={() => {
+            setShowMetrics(false)
+            history.replaceState(null, '', window.location.pathname)
+          }} />
+        </main>
+      </div>
+    )
+  }
 
   return (
     <div className="app">

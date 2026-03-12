@@ -25,6 +25,8 @@
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
+    "better-sqlite3": "^12.6.2",
+    "jsonwebtoken": "^9.0.3",
     "reflect-metadata": "^0.2.0",
     "rss-parser": "^3.13.0",
     "rxjs": "^7.2.0"

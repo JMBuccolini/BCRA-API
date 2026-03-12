@@ -36,3 +36,33 @@ export async function fetchNoticias() {
   if (!res.ok) throw new Error('Error al obtener noticias');
   return res.json();
 }
+
+// Metrics API
+const METRICS_BASE = API_URL + '/api/metrics';
+
+export async function metricsLogin(user, pass) {
+  const res = await fetch(`${METRICS_BASE}/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ user, pass }),
+  });
+  if (!res.ok) throw new Error('Credenciales inválidas');
+  return res.json();
+}
+
+async function metricsGet(endpoint, token) {
+  const res = await fetch(`${METRICS_BASE}/${endpoint}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (res.status === 401) throw new Error('UNAUTHORIZED');
+  if (!res.ok) throw new Error('Error al obtener métricas');
+  return res.json();
+}
+
+export const fetchMetricsSummary = (token) => metricsGet('summary', token);
+export const fetchMetricsTopRoutes = (token) => metricsGet('top-routes', token);
+export const fetchMetricsDaily = (token) => metricsGet('daily', token);
+export const fetchMetricsHourly = (token) => metricsGet('hourly', token);
+export const fetchMetricsDevices = (token) => metricsGet('devices', token);
+export const fetchMetricsReferers = (token) => metricsGet('referers', token);
+export const fetchMetricsRecent = (token) => metricsGet('recent', token);
